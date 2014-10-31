@@ -1,39 +1,44 @@
 require 'puppet_https'
+require 'json'
 
 class Groups
-  def initialize(group_info)
-    # hash of group information
-    @group_info = group_info
+  def initialize(nc_api_url, puppet_https)
+    @nc_api_url = nc_api_url
+    @puppet_https = puppet_https
   end
 
-  def self.get_group
+  def get_group(group_id)
     # HTTP GET
-    group_res = PuppetHttps.get("#{$nc_api_url}/v1/group/#{@group_info['id']}")
+    group_res = @puppet_https.get("#{@nc_api_url}/v1/groups/#{group_id}")
   end
 
-  def self.get_groups
-    group_res = PuppetHttps.get("#{$nc_api_url}/v1/groups")
+  def get_groups
+    group_res = @puppet_https.get("#{@nc_api_url}/v1/groups")
   end
 
-  def self.create_group
-    if @group_info['id']
+  def create_group(group_info)
+    if group_info['id']
       # HTTP PUT /v1/groups/:id
-      res = PuppetHttps.put("#{$nc_api_url}/v1/groups/#{@group_info['id']}", @group_info)
+      res = @puppet_https.put("#{@nc_api_url}/v1/groups/#{group_id}", group_info.to_json)
     else
       # HTTP POST /v1/groups
-      # get id in response and set @id (must follow redirects)
-      res = PuppetHttps.post("#{$nc_api_url}/v1/groups", @group_info)
+      res = @puppet_https.post("#{@nc_api_url}/v1/groups", group_info.to_json)
     end
   end
 
-  def self.update_group(group_delta)
+  def update_group(group_info_delta)
     # HTTP POST /v1/groups/:id
+    group_res = @puppet_https.post("#{@nc_api_url}/v1/groups/#{group_info_delta['id']}", group_info_delta.to_json)
+
+    unless group_res.code.to_i == 200
+      puts "Update Group failed: HTTP #{group_res.code} #{group_res.message}"
+    end
   end
 
-  def self.delete_group
-    group_res = PuppetHttps.delete("#{$nc_api_url}/v1/group/#{@group_info['id']}")
-    if res.code.to_i != 204
-      STDERR.puts "An error occured deleting the group: HTTP #{res.code} #{res.message}"
+  def delete_group(group_id)
+    group_res = @puppet_https.delete("#{@nc_api_url}/v1/groups/#{group_id}")
+    if group_res.code.to_i != 204
+      STDERR.puts "An error occured deleting the group: HTTP #{group_res.code} #{group_res.message}"
     end
   end
 end

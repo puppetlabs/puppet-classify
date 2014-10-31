@@ -2,14 +2,25 @@ require 'uri'
 require 'net/https'
 
 class PuppetHttps
-  def self.make_ssl_request(url, req)
+  def initialize(settings)
+    # Settings hash:
+    #   - ca_certificate_path
+    #   - certificate_path
+    #   - private_key_path
+    #
+
+    @settings = settings
+  end
+
+  def make_ssl_request(url, req)
     connection = Net::HTTP.new(url.host, url.port)
+    connection.set_debug_output $stderr
     connection.use_ssl = true
 
     connection.verify_mode = OpenSSL::SSL::VERIFY_PEER
-    ca_file = File.join(Rails.root, SETTINGS.ca_certificate_path)
-    certpath = File.join(Rails.root, SETTINGS.certificate_path)
-    pkey_path = File.join(Rails.root, SETTINGS.private_key_path)
+    ca_file = @settings['ca_certificate_path']
+    certpath = @settings['certificate_path']
+    pkey_path = @settings['private_key_path']
 
     if File.exists?(ca_file)
       connection.ca_file = ca_file
@@ -26,7 +37,7 @@ class PuppetHttps
     connection.start { |http| http.request(req) }
   end
 
-  def self.put(url, data)
+  def put(url, data)
     url = URI.parse(url)
     req = Net::HTTP::Put.new(url.path)
     req.content_type = 'application/json'
@@ -35,15 +46,16 @@ class PuppetHttps
     res.error! unless res.code_type == Net::HTTPOK
   end
 
-  def self.get(url, accept)
+  def get(url)
     url = URI.parse(url)
+    accept = 'application/json'
     req = Net::HTTP::Get.new("#{url.path}?#{url.query}", "Accept" => accept)
-    res = make_ssl_request(url, req, authenticate)
+    res = make_ssl_request(url, req)
     res.error! unless res.code_type == Net::HTTPOK
     res.body
   end
 
-  def self.post(url, request_body)
+  def post(url, request_body)
     url = URI.parse(url)
 
     request = Net::HTTP::Post.new(url.request_uri)
@@ -57,7 +69,7 @@ class PuppetHttps
     res
   end
 
-  def self.delete(url)
+  def delete(url)
     url = URI.parse(url)
 
     request = Net::HTTP::Delete.new(url.request_uri)

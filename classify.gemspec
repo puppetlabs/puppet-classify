@@ -6,6 +6,6 @@ Gem::Specification.new do |s|
   s.description = "Working"
   s.authors     = ["Brian Cain"]
   s.email       = 'brian.cain@puppetlabs.com'
-  s.files       = ["lib/classify.rb"]
+  s.files       = Dir['README.md', 'lib/**/*']
   s.license     = 'MIT'
 end
