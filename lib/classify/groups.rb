@@ -24,6 +24,10 @@ class Groups
       # HTTP POST /v1/groups
       res = @puppet_https.post("#{@nc_api_url}/v1/groups", group_info.to_json)
     end
+
+    if res.code.to_i >= 400
+      puts "An error occured creating the group: HTTP #{res.code} #{res.message}"
+    end
   end
 
   def update_group(group_info_delta)
