@@ -16,5 +16,9 @@ class Environments
 
   def create_environment(name)
     env_res = @puppet_https.put("#{@nc_api_url}/v1/environments/#{name}")
+
+    unless env_res.code.to_i == 201
+      puts "An error occured saving the environment: HTTP #{env_res.code} #{env_res.message}"
+    end
   end
 end

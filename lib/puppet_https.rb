@@ -37,13 +37,17 @@ class PuppetHttps
     connection.start { |http| http.request(req) }
   end
 
-  def put(url, data)
+  def put(url, request_body=nil)
     url = URI.parse(url)
     req = Net::HTTP::Put.new(url.path)
     req.content_type = 'application/json'
-    req.body = data
+
+    unless request_body.nil?
+      req.body = request_body
+    end
+
     res = make_ssl_request(url, req)
-    res.error! unless res.code_type == Net::HTTPOK
+    # res.error! unless res.code_type == Net::HTTPOK
   end
 
   def get(url)
