@@ -1,7 +1,7 @@
 require 'puppet_https'
 
 class Environments
-  def initalize(nc_api_url, puppet_https)
+  def initialize(nc_api_url, puppet_https)
     @nc_api_url = nc_api_url
     @puppet_https = puppet_https
   end
