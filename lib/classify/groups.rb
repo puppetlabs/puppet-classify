@@ -26,7 +26,7 @@ class Groups
     end
 
     if res.code.to_i >= 400
-      puts "An error occured creating the group: HTTP #{res.code} #{res.message}"
+      STDERR.puts "An error occured creating the group: HTTP #{res.code} #{res.message}"
     end
   end
 
@@ -35,7 +35,7 @@ class Groups
     group_res = @puppet_https.post("#{@nc_api_url}/v1/groups/#{group_info_delta['id']}", group_info_delta.to_json)
 
     unless group_res.code.to_i == 200
-      puts "Update Group failed: HTTP #{group_res.code} #{group_res.message}"
+      STDERR.puts "Update Group failed: HTTP #{group_res.code} #{group_res.message}"
     end
   end
 

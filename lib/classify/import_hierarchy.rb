@@ -10,8 +10,8 @@ class ImportHierarchy
     import_res = @puppet_https.post("#{@nc_api_url}/v1/import-hierarchy", group_hierarchy.to_json)
 
     if import_res.code.to_i >= 400
-      puts "An error has occured during import: HTTP #{import_res.code} #{import_res.message}"
-      puts import_res.body
+      STDERR.puts "An error has occured during import: HTTP #{import_res.code} #{import_res.message}"
+      STDERR.puts import_res.body
     end
   end
 end
