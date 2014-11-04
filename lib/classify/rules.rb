@@ -14,5 +14,7 @@ class Rules
       STDERR.puts "There was a problem with your rule: HTTP #{rules_res.code.to_i} #{rules_res.message}"
       STDERR.puts rules_res.body
     end
+
+    rules_res.body
   end
 end
