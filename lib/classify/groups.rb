@@ -12,6 +12,20 @@ class Groups
     group_res = @puppet_https.get("#{@nc_api_url}/v1/groups/#{group_id}")
   end
 
+  def get_group_id(group_name)
+    groups_res = @puppet_https.get("#{@nc_api_url}/v1/groups")
+
+    groups = JSON.parse(groups_res)
+
+    group_info = groups.find { |group| group['name'] == group_name }
+
+    if group_info.nil?
+      STDERR.puts "Could not find group with the name #{group_name}"
+    else
+      group_info['id']
+    end
+  end
+
   def get_groups
     group_res = @puppet_https.get("#{@nc_api_url}/v1/groups")
   end
