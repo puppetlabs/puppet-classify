@@ -3,6 +3,8 @@ require 'classify/groups'
 require 'classify/environments'
 require 'classify/classes'
 require 'classify/nodes'
+require 'classify/import_hierarchy'
+require 'classify/update_classes'
 
 class Classify
   def initialize(nc_api_url, https_settings)
@@ -39,6 +41,22 @@ class Classify
       @classes
     else
       @classes = Classes.new(@nc_api_url, @puppet_https)
+    end
+  end
+
+  def import_hierarchy
+    if @import_hierarchy
+      @import_hierarchy
+    else
+      @import_hierarchy = ImportHierarchy.new(@nc_api_url, @puppet_https)
+    end
+  end
+
+  def update_classes
+    if @update_classes
+      @update_classes
+    else
+      @update_classes = UpdateClasses.new(@nc_api_url, @puppet_https)
     end
   end
 end

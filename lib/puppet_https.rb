@@ -59,7 +59,7 @@ class PuppetHttps
     res.body
   end
 
-  def post(url, request_body)
+  def post(url, request_body=nil)
     url = URI.parse(url)
 
     request = Net::HTTP::Post.new(url.request_uri)
