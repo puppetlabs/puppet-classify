@@ -7,6 +7,7 @@ require 'classify/import_hierarchy'
 require 'classify/update_classes'
 require 'classify/validate'
 require 'classify/rules'
+require 'classify/last_class_update'
 
 class Classify
   def initialize(nc_api_url, https_settings)
@@ -75,6 +76,14 @@ class Classify
       @rules
     else
       @rules = Rules.new(@nc_api_url, @puppet_https)
+    end
+  end
+
+  def last_class_update
+    if @last_class_update
+      @last_class_update
+    else
+      @last_class_update = LastClassUpdate.new(@nc_api_url, @puppet_https)
     end
   end
 end
