@@ -5,6 +5,7 @@ require 'classify/classes'
 require 'classify/nodes'
 require 'classify/import_hierarchy'
 require 'classify/update_classes'
+require 'classify/validate'
 
 class Classify
   def initialize(nc_api_url, https_settings)
@@ -57,6 +58,14 @@ class Classify
       @update_classes
     else
       @update_classes = UpdateClasses.new(@nc_api_url, @puppet_https)
+    end
+  end
+
+  def validate
+    if @validate
+      @validate
+    else
+      @validate = Validate.new(@nc_api_url, @puppet_https)
     end
   end
 end
