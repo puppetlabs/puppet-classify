@@ -6,6 +6,7 @@ require 'classify/nodes'
 require 'classify/import_hierarchy'
 require 'classify/update_classes'
 require 'classify/validate'
+require 'classify/rules'
 
 class Classify
   def initialize(nc_api_url, https_settings)
@@ -66,6 +67,14 @@ class Classify
       @validate
     else
       @validate = Validate.new(@nc_api_url, @puppet_https)
+    end
+  end
+
+  def rules
+    if @rules
+      @rules
+    else
+      @rules = Rules.new(@nc_api_url, @puppet_https)
     end
   end
 end
