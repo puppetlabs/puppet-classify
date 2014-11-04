@@ -8,9 +8,11 @@ class Nodes
 
   def get_nodes
     node_res = @puppet_https.get("#{@nc_api_url}/v1/nodes")
+    node_res.body
   end
 
   def get_node(node_name)
     node_res = @puppet_https.get("#{@nc_api_url}/v1/nodes/#{node_name}")
+    node_res.body
   end
 end

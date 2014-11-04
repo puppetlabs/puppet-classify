@@ -10,12 +10,13 @@ class Groups
   def get_group(group_id)
     # HTTP GET
     group_res = @puppet_https.get("#{@nc_api_url}/v1/groups/#{group_id}")
+    group_res.body
   end
 
   def get_group_id(group_name)
     groups_res = @puppet_https.get("#{@nc_api_url}/v1/groups")
 
-    groups = JSON.parse(groups_res)
+    groups = JSON.parse(groups_res.body)
 
     group_info = groups.find { |group| group['name'] == group_name }
 
@@ -28,6 +29,7 @@ class Groups
 
   def get_groups
     group_res = @puppet_https.get("#{@nc_api_url}/v1/groups")
+    group_res.body
   end
 
   def create_group(group_info)

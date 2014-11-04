@@ -47,7 +47,6 @@ class PuppetHttps
     end
 
     res = make_ssl_request(url, req)
-    # res.error! unless res.code_type == Net::HTTPOK
   end
 
   def get(url)
@@ -56,7 +55,8 @@ class PuppetHttps
     req = Net::HTTP::Get.new("#{url.path}?#{url.query}", "Accept" => accept)
     res = make_ssl_request(url, req)
     res.error! unless res.code_type == Net::HTTPOK
-    res.body
+
+    res
   end
 
   def post(url, request_body=nil)
