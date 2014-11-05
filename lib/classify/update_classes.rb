@@ -10,7 +10,7 @@ class UpdateClasses
     update_res = @puppet_https.post("#{@nc_api_url}/v1/update-classes")
 
     unless update_res.code.to_i == 201
-      STDERR.puts "An error has occured during the update: HTTP #{update_res.code} #{update_res.message}"
+      STDERR.puts "An error has occurred during the update: HTTP #{update_res.code} #{update_res.message}"
       STDERR.puts update_res.body
     end
   end
