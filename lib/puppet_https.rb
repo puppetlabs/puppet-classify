@@ -14,7 +14,7 @@ class PuppetHttps
 
   def make_ssl_request(url, req)
     connection = Net::HTTP.new(url.host, url.port)
-    connection.set_debug_output $stderr
+    # connection.set_debug_output $stderr
     connection.use_ssl = true
     connection.ssl_version = :TLSv1
 
