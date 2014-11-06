@@ -16,6 +16,7 @@ class PuppetHttps
     connection = Net::HTTP.new(url.host, url.port)
     connection.set_debug_output $stderr
     connection.use_ssl = true
+    connection.ssl_version = :TLSv1
 
     connection.verify_mode = OpenSSL::SSL::VERIFY_PEER
     ca_file = @settings['ca_certificate_path']
