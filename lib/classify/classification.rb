@@ -13,7 +13,7 @@ class Classification
       STDERR.puts "An error occured retreiving the classification of node #{name}: HTTP #{class_res.code} #{class_res.message}"
       STDERR.puts class_res.body
     else
-      class_res.body
+      JSON.parse(class_res.body)
     end
   end
 
@@ -24,7 +24,7 @@ class Classification
       STDERR.puts "An error occured retreiving the classification explanation of node #{name}: HTTP #{class_res.code} #{class_res.message}"
       STDERR.puts class_res.body
     else
-      class_res.body
+      JSON.parse(class_res.body)
     end
   end
 

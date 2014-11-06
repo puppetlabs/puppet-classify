@@ -10,7 +10,12 @@ class Groups
   def get_group(group_id)
     # HTTP GET
     group_res = @puppet_https.get("#{@nc_api_url}/v1/groups/#{group_id}")
-    group_res.body
+    unless group_res.code.to_i != 200
+      JSON.parse(group_res.body)
+    else
+      STDERR.puts "An error occured with your request: HTTP #{group_res.code} #{group_res.message}"
+      STDERR.puts group_res.body
+    end
   end
 
   def get_group_id(group_name)
@@ -29,7 +34,7 @@ class Groups
 
   def get_groups
     group_res = @puppet_https.get("#{@nc_api_url}/v1/groups")
-    group_res.body
+    JSON.parse(group_res.body)
   end
 
   def create_group(group_info)

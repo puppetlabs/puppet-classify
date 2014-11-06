@@ -8,12 +8,12 @@ class Environments
 
   def get_environments
     env_res = @puppet_https.get("#{@nc_api_url}/v1/environments")
-    env_res.body
+    JSON.parse(env_res.body)
   end
 
   def get_environment(name)
     env_res = @puppet_https.get("#{@nc_api_url}/v1/environments/#{name}")
-    env_res.body
+    JSON.parse(env_res.body)
   end
 
   def create_environment(name)

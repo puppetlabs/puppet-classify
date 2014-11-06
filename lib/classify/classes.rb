@@ -8,16 +8,16 @@ class Classes
 
   def get_classes
     class_res = @puppet_https.get("#{@nc_api_url}/v1/classes")
-    class_res.body
+    JSON.parse(class_res.body)
   end
 
   def get_environment_classes(environment)
     class_res = @puppet_https.get("#{@nc_api_url}/v1/environments/#{environment}/classes")
-    class_res.body
+    JSON.parse(class_res.body)
   end
 
   def get_environment_class(environment, class_name)
     class_res = @puppet_https.get("#{@nc_api_url}/v1/environments/#{environment}/classes/#{class_name}")
-    class_res.body
+    JSON.parse(class_res.body)
   end
 end

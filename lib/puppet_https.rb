@@ -55,8 +55,6 @@ class PuppetHttps
     accept = 'application/json'
     req = Net::HTTP::Get.new("#{url.path}?#{url.query}", "Accept" => accept)
     res = make_ssl_request(url, req)
-    res.error! unless res.code_type == Net::HTTPOK
-
     res
   end
 

@@ -9,6 +9,6 @@ class LastClassUpdate
   def get
     class_update_res = @puppet_https.get("#{@nc_api_url}/v1/last-class-update")
 
-    class_update_res.body
+    JSON.parse(class_update_res.body)
   end
 end
