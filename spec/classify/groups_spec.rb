@@ -55,10 +55,24 @@ describe Groups do
   end
 
   describe "#create_group" do
+    let(:example_group) { example_group = {"name"=>"examplegroup", "description"=>"A cool group", "environment"=>"production", "parent"=>"00000000-0000-4000-8000-000000000000", "classes"=>{}} }
+
+    let(:group_with_id) { group_with_id = {"name"=>"groupwithid", "description"=>"A cool group", "environment"=>"production", "parent"=>"00000000-0000-4000-8000-000000000000", "classes"=>{}, "id"=>"fc500c43-5065-469b-91fc-37ed0e500e81"} }
+
     it "creates a group with a specified id" do
+      stub_request(:put, "#{@classifier_url}/v1/groups/#{group_with_id['id']}").
+                 with(:body => group_with_id,
+                      :headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
+                 to_return(:status => 303, :body => "", :headers => {})
+        expect(@classify.groups.create_group(group_with_id)).to be_an_instance_of String
     end
 
     it "creates a group without a specified id" do
+      stub_request(:post, "#{@classifier_url}/v1/groups").
+                 with(:body => example_group,
+                      :headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
+                 to_return(:status => 303, :body => "", :headers => {:location => "/classifier-api/v1/groups/777fa762-4cbc-4dff-af6b-38cc32acbca0"})
+        expect(@classify.groups.create_group(example_group)).to be_an_instance_of String
     end
   end
 

@@ -49,7 +49,11 @@ class Groups
     if res.code.to_i >= 400
       STDERR.puts "An error occured creating the group: HTTP #{res.code} #{res.message}"
     else
-      res['location'].split("/")[-1]
+      unless group_info['id']
+        res['location'].split("/")[-1]
+      else
+        group_info['id']
+      end
     end
   end
 
