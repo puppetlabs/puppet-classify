@@ -1,5 +1,4 @@
 require 'spec_helper'
-require_relative '../../lib/classify/environments.rb'
 require_relative '../../lib/classify'
 
 describe Environments do

@@ -1,5 +1,4 @@
 require 'spec_helper'
-require_relative '../../lib/classify/groups.rb'
 require_relative '../../lib/classify'
 
 describe Groups do

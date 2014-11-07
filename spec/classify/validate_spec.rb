@@ -1,5 +1,4 @@
 require 'spec_helper'
-require_relative '../../lib/classify/classes.rb'
 require_relative '../../lib/classify'
 
 describe Validate do

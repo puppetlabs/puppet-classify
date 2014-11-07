@@ -1,5 +1,4 @@
 require 'spec_helper'
-require_relative '../../lib/classify/update_classes.rb'
 require_relative '../../lib/classify'
 
 describe UpdateClasses do
