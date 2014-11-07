@@ -49,4 +49,17 @@ describe Groups do
     end
   end
 
+  describe "#get_group_id" do
+    it "returns a group id given a group name" do
+    end
+  end
+
+  describe "#create_group" do
+    it "creates a group with a specified id" do
+    end
+
+    it "creates a group without a specified id" do
+    end
+  end
+
 end
