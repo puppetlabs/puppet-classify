@@ -76,4 +76,27 @@ describe Groups do
     end
   end
 
+  describe "#update_group" do
+    let(:example_group_delta) { example_group_delta = {"description"=>"A super cool group", "id"=>"fc500c43-5065-469b-91fc-37ed0e500e81"} }
+
+    it "updates a group given a delta" do
+      stub_request(:post, "#{@classifier_url}/v1/groups/#{example_group_delta['id']}").
+                 with(:body => example_group_delta,
+                      :headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
+                 to_return(:status => 200, :body => "", :headers => {})
+      expect(@classify.groups.update_group(example_group_delta)).to be_nil
+    end
+  end
+
+  describe "#delete_group" do
+    let(:id) { id = "fc500c43-5065-469b-91fc-37ed0e500e81" }
+
+    it "deletes a group given an ID" do
+      stub_request(:delete, "#{@classifier_url}/v1/groups/#{id}").
+                 with(:headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
+                 to_return(:status => 204, :body => "", :headers => {})
+      expect(@classify.groups.delete_group(id)).to be_nil
+    end
+  end
+
 end
