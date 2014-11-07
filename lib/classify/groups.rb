@@ -40,7 +40,7 @@ class Groups
   def create_group(group_info)
     if group_info['id']
       # HTTP PUT /v1/groups/:id
-      res = @puppet_https.put("#{@nc_api_url}/v1/groups/#{group_id}", group_info.to_json)
+      res = @puppet_https.put("#{@nc_api_url}/v1/groups/#{group_info['id']}", group_info.to_json)
     else
       # HTTP POST /v1/groups
       res = @puppet_https.post("#{@nc_api_url}/v1/groups", group_info.to_json)
