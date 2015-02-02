@@ -1,5 +1,5 @@
 require 'spec_helper'
-require_relative '../../lib/classify'
+require_relative '../../lib/puppetclassify'
 
 describe Nodes do
   before :each do
@@ -11,7 +11,7 @@ describe Nodes do
       "private_key_path"    => "/opt/puppet/share/puppet-dashboard/certs/pe-internal-dashboard.private_key.pem"
     }
 
-    @classify = Classify.new(@classifier_url, auth_info)
+    @puppetclassify = PuppetClassify.new(@classifier_url, auth_info)
   end
 
   describe "#get_nodes" do

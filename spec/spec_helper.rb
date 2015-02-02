@@ -1,2 +1,2 @@
-require 'classify'
+require 'puppetclassify'
 require 'webmock/rspec'

@@ -1,16 +1,16 @@
 require 'puppet_https'
-require 'classify/groups'
-require 'classify/environments'
-require 'classify/classes'
-require 'classify/nodes'
-require 'classify/import_hierarchy'
-require 'classify/update_classes'
-require 'classify/validate'
-require 'classify/rules'
-require 'classify/last_class_update'
-require 'classify/classification'
+require 'puppetclassify/groups'
+require 'puppetclassify/environments'
+require 'puppetclassify/classes'
+require 'puppetclassify/nodes'
+require 'puppetclassify/import_hierarchy'
+require 'puppetclassify/update_classes'
+require 'puppetclassify/validate'
+require 'puppetclassify/rules'
+require 'puppetclassify/last_class_update'
+require 'puppetclassify/classification'
 
-class Classify
+class PuppetClassify
   def initialize(nc_api_url, https_settings)
     @nc_api_url = nc_api_url
     @puppet_https = PuppetHttps.new(https_settings)

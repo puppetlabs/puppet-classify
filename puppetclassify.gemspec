@@ -1,5 +1,5 @@
 Gem::Specification.new do |s|
-  s.name        = 'classify'
+  s.name        = 'puppetclassify'
   s.version     = '0.1.0'
   s.date        = '2014-10-30'
   s.summary     = 'Puppet Classify!'

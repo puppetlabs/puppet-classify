@@ -1,5 +1,5 @@
 require 'spec_helper'
-require_relative '../../lib/classify'
+require_relative '../../lib/puppetclassify'
 
 describe Environments do
   before :each do
@@ -11,7 +11,7 @@ describe Environments do
       "private_key_path"    => "/opt/puppet/share/puppet-dashboard/certs/pe-internal-dashboard.private_key.pem"
     }
 
-    @classify = Classify.new(@classifier_url, auth_info)
+    @puppetclassify = PuppetClassify.new(@classifier_url, auth_info)
   end
 
   describe "#get_environments" do
@@ -21,7 +21,7 @@ describe Environments do
       stub_request(:get, "#{@classifier_url}/v1/environments").
         with(:headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent'=>'Ruby'}).
         to_return(:status => 200, :body => response_body, :headers => {})
-      expect(@classify.environments.get_environments).to be_an_instance_of Array
+      expect(@puppetclassify.environments.get_environments).to be_an_instance_of Array
     end
   end
 
@@ -33,7 +33,7 @@ describe Environments do
       stub_request(:get, "#{@classifier_url}/v1/environments/#{name}").
         with(:headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent'=>'Ruby'}).
         to_return(:status => 200, :body => response_body, :headers => {})
-      expect(@classify.environments.get_environment(name)).to be_an_instance_of Hash
+      expect(@puppetclassify.environments.get_environment(name)).to be_an_instance_of Hash
     end
   end
 
@@ -44,7 +44,7 @@ describe Environments do
       stub_request(:put, "#{@classifier_url}/v1/environments/#{name}").
                  with(:headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
                  to_return(:status => 201, :body => "", :headers => {})
-      expect(@classify.environments.create_environment(name)).to be_nil
+      expect(@puppetclassify.environments.create_environment(name)).to be_nil
     end
   end
 end

@@ -1,6 +1,6 @@
 require 'spec_helper'
-require_relative '../../lib/classify/last_class_update.rb'
-require_relative '../../lib/classify'
+require_relative '../../lib/puppetclassify/last_class_update.rb'
+require_relative '../../lib/puppetclassify'
 
 describe LastClassUpdate do
   before :each do
@@ -12,7 +12,7 @@ describe LastClassUpdate do
       "private_key_path"    => "/opt/puppet/share/puppet-dashboard/certs/pe-internal-dashboard.private_key.pem"
     }
 
-    @classify = Classify.new(@classifier_url, auth_info)
+    @puppetclassify = PuppetClassify.new(@classifier_url, auth_info)
   end
 
   describe "#get" do
@@ -21,7 +21,7 @@ describe LastClassUpdate do
       stub_request(:get, "#{@classifier_url}/v1/last-class-update").
                  with(:headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent'=>'Ruby'}).
                  to_return(:status => 200, :body => response_body.to_json, :headers => {})
-      expect(@classify.last_class_update.get).to be_an_instance_of Hash
+      expect(@puppetclassify.last_class_update.get).to be_an_instance_of Hash
     end
   end
 end
