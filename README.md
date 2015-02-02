@@ -5,6 +5,12 @@ A ruby library to interface with the classifier service
 ## How to install
 
 ```
+gem install puppetclassify
+```
+
+### Locally
+
+```
 gem build puppetclassify.gemspec
 gem install puppetclassify-0.1.0.gem
 ```
