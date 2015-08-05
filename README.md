@@ -21,9 +21,9 @@ gem install puppetclassify-0.1.0.gem
 require 'puppetclassify'
 # URL of classifier as well as certificates and private key for auth
 auth_info = {
-  "ca_certificate_path" => "/opt/puppet/share/puppet-dashboard/certs/ca_cert.pem",
-  "certificate_path"    => "/opt/puppet/share/puppet-dashboard/certs/pe-internal-dashboard.cert.pem",
-  "private_key_path"    => "/opt/puppet/share/puppet-dashboard/certs/pe-internal-dashboard.private_key.pem"
+  "ca_certificate_path" => "/etc/puppetlabs/puppet/ssl/certs/ca.pem",
+  "certificate_path"    => "/etc/puppetlabs/puppet/ssl/certs/myhostname.vm.pem",
+  "private_key_path"    => "/etc/puppetlabs/puppet/ssl/private_keys/myhostname.vm.pem"
 }
 
 classifier_url = 'https://puppetmaster.local:4433/classifier-api'
