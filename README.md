@@ -54,7 +54,7 @@ puppetclassify = PuppetClassify.new(classifier_url, auth_info)
 
 my_group_id = puppetclassify.groups.get_group_id("My Group Name")
 group_delta = {"variables"=>{"key"=>"value"}, "id"=>my_group_id, "classes"=>{"motd"=>{"content"=>"hello!"}}} # an example to update a groups variables and classes
-puppetclassify.update_group(group_delta)
+puppetclassify.groups.update_group(group_delta)
 ```
 
 ## Library Docs
