@@ -21,7 +21,13 @@ class Groups
   def get_group_id(group_name)
     groups_res = @puppet_https.get("#{@nc_api_url}/v1/groups")
 
-    groups = JSON.parse(groups_res.body)
+    unless groups_res.code.to_i != 200
+      groups = JSON.parse(groups_res.body)
+    else
+      STDERR.puts "An error occured with your request: HTTP #{groups_res.code} #{groups_res.message}"
+      STDERR.puts groups_res.body
+      exit 1
+    end
 
     group_info = groups.find { |group| group['name'] == group_name }
 
