@@ -54,6 +54,7 @@ class Groups
 
     if res.code.to_i >= 400
       STDERR.puts "An error occured creating the group: HTTP #{res.code} #{res.message}"
+      STDERR.puts res.body
     else
       unless group_info['id']
         res['location'].split("/")[-1]
@@ -69,6 +70,7 @@ class Groups
 
     unless group_res.code.to_i == 200
       STDERR.puts "Update Group failed: HTTP #{group_res.code} #{group_res.message}"
+      STDERR.puts group_res.body
     end
   end
 
@@ -76,6 +78,7 @@ class Groups
     group_res = @puppet_https.delete("#{@nc_api_url}/v1/groups/#{group_id}")
     if group_res.code.to_i != 204
       STDERR.puts "An error occured deleting the group: HTTP #{group_res.code} #{group_res.message}"
+      STDERR.puts group_res.body
     end
   end
 end

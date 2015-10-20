@@ -21,6 +21,7 @@ class Environments
 
     unless env_res.code.to_i == 201
       STDERR.puts "An error occured saving the environment: HTTP #{env_res.code} #{env_res.message}"
+      STDERR.puts env_res.body
     end
   end
 end
