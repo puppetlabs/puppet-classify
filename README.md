@@ -2,6 +2,8 @@
 
 A ruby library to interface with the classifier service
 
+[![Gem Version](https://badge.fury.io/rb/puppetclassify.svg)](https://badge.fury.io/rb/puppetclassify)
+
 ## How to install
 
 ```
