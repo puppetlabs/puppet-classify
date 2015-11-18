@@ -24,4 +24,13 @@ class Environments
       STDERR.puts env_res.body
     end
   end
+
+  def delete_environment(name)
+    env_res = @puppet_https.delete("#{@nc_api_url}/v1/environments/#{name}")
+
+    unless env_res.code.to_i == 204
+      STDERR.puts "An error occured deleting the environment: HTTP #{env_res.code} #{env_res.message}"
+      STDERR.puts env_res.body
+    end
+  end
 end
