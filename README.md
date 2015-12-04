@@ -109,6 +109,34 @@ facts = { 'fact' => Facter.to_hash }
 puppetclassify.classification.get('myhostname.puppetlabs.vm', facts)
 ```
 
+### Pinning and unpinning nodes to a group in Puppet enterprise
+
+If you want to "pin" a node to a specific group so it gets that classification, you can
+invoke the pin_nodes command. And if you want to remove nodes from that group, you can run
+the unpin_nodes command.
+
+```
+require 'puppetclassify'
+# URL of classifier as well as certificates and private key for auth
+auth_info = {
+  "ca_certificate_path" => "/etc/puppetlabs/puppet/ssl/certs/ca.pem",
+  "certificate_path"    => "/etc/puppetlabs/puppet/ssl/certs/myhostname.vm.pem",
+  "private_key_path"    => "/etc/puppetlabs/puppet/ssl/private_keys/myhostname.vm.pem"
+}
+
+classifier_url = 'https://puppetmaster.local:4433/classifier-api'
+puppetclassify = PuppetClassify.new(classifier_url, auth_info)
+
+my_group_id = puppetclassify.groups.get_group_id("My Super Awesome Group Name")
+
+nodes = ["hostname.com", "myotherhost.com", "anotherhost.com"]
+# pin nodes to group
+puppetclassify.groups.pin_nodes(my_group_id, nodes)
+
+# unpin nodes from group
+puppetclassify.groups.unpin_nodes(my_group_id, nodes)
+```
+
 ## Library Docs
 
 [rubydoc](http://www.rubydoc.info/gems/puppetclassify/0.1.0)

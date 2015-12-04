@@ -98,4 +98,29 @@ describe Groups do
     end
   end
 
+  describe "#pin_nodes" do
+    let(:id) { id = "fc500c43-5065-469b-91fc-37ed0e500e81" }
+    let(:nodes) { nodes = ["foo", "bar", "baz"] }
+
+    it "pins a node to a given group" do
+      stub_request(:post, "#{@classifier_url}/v1/groups/#{id}/pin").
+         with(:body => "{\"nodes\":[\"foo\",\"bar\",\"baz\"]}",
+              :headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
+         to_return(:status => 204, :body => "", :headers => {})
+      expect(@puppetclassify.groups.pin_nodes(id, nodes)).to be_nil
+    end
+  end
+
+  describe "#unpin_nodes" do
+    let(:id) { id = "fc500c43-5065-469b-91fc-37ed0e500e81" }
+    let(:nodes) { nodes = ["foo", "bar", "baz"] }
+
+    it "pins a node to a given group" do
+      stub_request(:post, "#{@classifier_url}/v1/groups/#{id}/unpin").
+         with(:body => "{\"nodes\":[\"foo\",\"bar\",\"baz\"]}",
+              :headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
+         to_return(:status => 204, :body => "", :headers => {})
+      expect(@puppetclassify.groups.unpin_nodes(id, nodes)).to be_nil
+    end
+  end
 end
