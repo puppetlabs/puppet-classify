@@ -6,8 +6,13 @@ class Classification
     @puppet_https = puppet_https
   end
 
-  def get(name)
-    class_res = @puppet_https.post("#{@nc_api_url}/v1/classified/nodes/#{name}")
+  def get(name, facts={})
+    unless facts.class == Hash
+      STDERR.puts "Facts should be a hash, not a #{facts.class}"
+      return false
+    end
+
+    class_res = @puppet_https.post("#{@nc_api_url}/v1/classified/nodes/#{name}", facts.to_json)
 
     unless class_res.code.to_i == 200
       STDERR.puts "An error occured retreiving the classification of node #{name}: HTTP #{class_res.code} #{class_res.message}"
@@ -17,8 +22,13 @@ class Classification
     end
   end
 
-  def explain(name)
-    class_res = @puppet_https.post("#{@nc_api_url}/v1/classified/nodes/#{name}/explanation")
+  def explain(name, facts={})
+    unless facts.class == Hash
+      STDERR.puts "Facts should be a hash, not a #{facts.class}"
+      return false
+    end
+
+    class_res = @puppet_https.post("#{@nc_api_url}/v1/classified/nodes/#{name}/explanation", facts.to_json)
 
     unless class_res.code.to_i == 200
       STDERR.puts "An error occured retreiving the classification explanation of node #{name}: HTTP #{class_res.code} #{class_res.message}"
