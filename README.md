@@ -60,6 +60,55 @@ group_delta = {"variables"=>{"key"=>"value"}, "id"=>my_group_id, "classes"=>{"mo
 puppetclassify.groups.update_group(group_delta)
 ```
 
+### Retrieving classification of a node
+
+Because the Console classifies nodes based on rules, you may want to submit a
+complete `facts` hash for rules to match. See [the API docs](https://docs.puppetlabs.com/pe/latest/nc_classification.html)
+for examples.
+
+You can retrieve facts for the local node either using Facter from Ruby or the
+command line. For example:
+
+```ruby
+#! /opt/puppetlabs/puppet/bin/ruby
+require 'facter'
+
+facts = { 'fact' => Facter.to_hash }
+```
+
+or:
+
+```ruby
+#! /usr/bin/env ruby
+require 'json'
+
+facts = { 'fact' => JSON.parse(`facter -j`) }
+```
+
+Once you have the facts, retrieving classification of a node is simple:
+
+```ruby
+#! /opt/puppetlabs/puppet/bin/ruby
+require 'facter'
+require 'puppetclassify'
+
+# URL of classifier as well as certificates and private key for auth
+auth_info = {
+  "ca_certificate_path" => "/etc/puppetlabs/puppet/ssl/certs/ca.pem",
+  "certificate_path"    => "/etc/puppetlabs/puppet/ssl/certs/myhostname.vm.pem",
+  "private_key_path"    => "/etc/puppetlabs/puppet/ssl/private_keys/myhostname.vm.pem"
+}
+
+classifier_url = 'https://puppetmaster.local:4433/classifier-api'
+puppetclassify = PuppetClassify.new(classifier_url, auth_info)
+
+# gather facts
+facts = { 'fact' => Facter.to_hash }
+
+# Get a node's classification
+puppetclassify.classification.get('myhostname.puppetlabs.vm', facts)
+```
+
 ## Library Docs
 
 [rubydoc](http://www.rubydoc.info/gems/puppetclassify/0.1.0)
