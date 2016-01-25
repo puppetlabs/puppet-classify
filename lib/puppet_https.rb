@@ -17,7 +17,7 @@ class PuppetHttps
     # connection.set_debug_output $stderr
     connection.use_ssl = true
     connection.ssl_version = :TLSv1
-    connection.read_timeout = @settings['read_timeout'] || 60 #A default timeout value
+    connection.read_timeout = @settings['read_timeout'] || 90 #A default timeout value in seconds
 
     connection.verify_mode = OpenSSL::SSL::VERIFY_PEER
     ca_file = @settings['ca_certificate_path']

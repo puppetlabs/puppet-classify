@@ -29,7 +29,8 @@ require 'puppetclassify'
 auth_info = {
   "ca_certificate_path" => "/etc/puppetlabs/puppet/ssl/certs/ca.pem",
   "certificate_path"    => "/etc/puppetlabs/puppet/ssl/certs/myhostname.vm.pem",
-  "private_key_path"    => "/etc/puppetlabs/puppet/ssl/private_keys/myhostname.vm.pem"
+  "private_key_path"    => "/etc/puppetlabs/puppet/ssl/private_keys/myhostname.vm.pem",
+  "read_timeout"        => 90 # optional timeout, defaults to 90 if this key doesn't exist
 }
 
 classifier_url = 'https://puppetmaster.local:4433/classifier-api'
