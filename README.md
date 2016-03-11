@@ -17,6 +17,12 @@ gem build puppetclassify.gemspec
 gem install puppetclassify-0.1.0.gem
 ```
 
+## Maintenance
+
+Maintainers: [Brian Cain](https://github.com/briancain) <brian.cain@puppetlabs.com>
+
+Tickets: Open an issue or pull request directly on this repository
+
 ## How to use
 
 ### Basic case

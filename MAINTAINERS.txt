@@ -1,0 +1,7 @@
+# Maintainenance
+
+Brian Cain
+  - https://github.com/briancain
+  - brian.cain@puppetlabs.com
+
+Tickets: Open an issue or pull request directly on this repository
