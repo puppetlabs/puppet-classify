@@ -121,7 +121,7 @@ If you want to "pin" a node to a specific group so it gets that classification, 
 invoke the pin_nodes command. And if you want to remove nodes from that group, you can run
 the unpin_nodes command.
 
-```
+```ruby
 require 'puppetclassify'
 # URL of classifier as well as certificates and private key for auth
 auth_info = {
