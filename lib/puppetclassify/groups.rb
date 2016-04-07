@@ -81,4 +81,26 @@ class Groups
       STDERR.puts group_res.body
     end
   end
+
+  def pin_nodes(group_id, node_hash)
+    request_body = {}
+    request_body["nodes"] = node_hash # expects node_hash to be array, i.e. ["foo", "bar", "baz"]
+    group_response = @puppet_https.post("#{@nc_api_url}/v1/groups/#{group_id}/pin", request_body.to_json)
+
+    unless group_response.code.to_i == 204
+      STDERR.puts "An error occured pinning nodes the group: HTTP #{group_response.code} #{group_response.message}"
+      STDERR.puts group_response.body
+    end
+  end
+
+  def unpin_nodes(group_id, node_hash)
+    request_body = {}
+    request_body["nodes"] = node_hash # expects node_hash to be array, i.e. ["foo", "bar", "baz"]
+    group_response = @puppet_https.post("#{@nc_api_url}/v1/groups/#{group_id}/unpin", request_body.to_json)
+
+    unless group_response.code.to_i == 204
+      STDERR.puts "An error occured unpinning nodes the group: HTTP #{group_response.code} #{group_response.message}"
+      STDERR.puts group_response.body
+    end
+  end
 end
