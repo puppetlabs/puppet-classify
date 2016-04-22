@@ -26,7 +26,6 @@ class Groups
     else
       STDERR.puts "An error occured with your request: HTTP #{groups_res.code} #{groups_res.message}"
       STDERR.puts groups_res.body
-      exit 1
     end
 
     group_info = groups.find { |group| group['name'] == group_name }
