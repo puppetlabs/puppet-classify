@@ -25,9 +25,7 @@ Tickets: Open an issue or pull request directly on this repository
 
 ## How to use
 
-### Basic case
-
-If you are wanting to get all of the groups the classifier knows about:
+Here is the basic configuration you'll need to use the puppetclassify class:
 
 ```ruby
 require 'puppetclassify'
@@ -41,6 +39,13 @@ auth_info = {
 
 classifier_url = 'https://puppetmaster.local:4433/classifier-api'
 puppetclassify = PuppetClassify.new(classifier_url, auth_info)
+```
+
+### Basic case
+
+If you are wanting to get all of the groups the classifier knows about:
+
+```ruby
 # Get all the groups
 puppetclassify.groups.get_groups
 ```
@@ -50,17 +55,6 @@ puppetclassify.groups.get_groups
 If you have a group you want to modify, but do not know the group ID:
 
 ```ruby
-require 'puppetclassify'
-# URL of classifier as well as certificates and private key for auth
-auth_info = {
-  "ca_certificate_path" => "/etc/puppetlabs/puppet/ssl/certs/ca.pem",
-  "certificate_path"    => "/etc/puppetlabs/puppet/ssl/certs/myhostname.vm.pem",
-  "private_key_path"    => "/etc/puppetlabs/puppet/ssl/private_keys/myhostname.vm.pem"
-}
-
-classifier_url = 'https://puppetmaster.local:4433/classifier-api'
-puppetclassify = PuppetClassify.new(classifier_url, auth_info)
-
 my_group_id = puppetclassify.groups.get_group_id("My Group Name")
 group_delta = {"variables"=>{"key"=>"value"}, "id"=>my_group_id, "classes"=>{"motd"=>{"content"=>"hello!"}}} # an example to update a groups variables and classes
 puppetclassify.groups.update_group(group_delta)
@@ -98,15 +92,7 @@ Once you have the facts, retrieving classification of a node is simple:
 require 'facter'
 require 'puppetclassify'
 
-# URL of classifier as well as certificates and private key for auth
-auth_info = {
-  "ca_certificate_path" => "/etc/puppetlabs/puppet/ssl/certs/ca.pem",
-  "certificate_path"    => "/etc/puppetlabs/puppet/ssl/certs/myhostname.vm.pem",
-  "private_key_path"    => "/etc/puppetlabs/puppet/ssl/private_keys/myhostname.vm.pem"
-}
-
-classifier_url = 'https://puppetmaster.local:4433/classifier-api'
-puppetclassify = PuppetClassify.new(classifier_url, auth_info)
+# NOTE: Add setup information here for puppetclassify
 
 # gather facts
 facts = { 'fact' => Facter.to_hash }
@@ -121,18 +107,9 @@ If you want to "pin" a node to a specific group so it gets that classification, 
 invoke the pin_nodes command. And if you want to remove nodes from that group, you can run
 the unpin_nodes command.
 
+If you want to remove nodes from every group they are pinned to, use the unpin_from_all command.
+
 ```ruby
-require 'puppetclassify'
-# URL of classifier as well as certificates and private key for auth
-auth_info = {
-  "ca_certificate_path" => "/etc/puppetlabs/puppet/ssl/certs/ca.pem",
-  "certificate_path"    => "/etc/puppetlabs/puppet/ssl/certs/myhostname.vm.pem",
-  "private_key_path"    => "/etc/puppetlabs/puppet/ssl/private_keys/myhostname.vm.pem"
-}
-
-classifier_url = 'https://puppetmaster.local:4433/classifier-api'
-puppetclassify = PuppetClassify.new(classifier_url, auth_info)
-
 my_group_id = puppetclassify.groups.get_group_id("My Super Awesome Group Name")
 
 nodes = ["hostname.com", "myotherhost.com", "anotherhost.com"]
@@ -141,6 +118,9 @@ puppetclassify.groups.pin_nodes(my_group_id, nodes)
 
 # unpin nodes from group
 puppetclassify.groups.unpin_nodes(my_group_id, nodes)
+
+# unpin nodes from EVERY group
+puppetlcassify.commands.unpin_from_all(nodes)
 ```
 
 ## Library Docs

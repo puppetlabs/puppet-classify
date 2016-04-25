@@ -9,6 +9,7 @@ require 'puppetclassify/validate'
 require 'puppetclassify/rules'
 require 'puppetclassify/last_class_update'
 require 'puppetclassify/classification'
+require 'puppetclassify/commands'
 
 class PuppetClassify
   def initialize(nc_api_url, https_settings)
@@ -93,6 +94,14 @@ class PuppetClassify
       @classification
     else
       @classification = Classification.new(@nc_api_url, @puppet_https)
+    end
+  end
+
+  def commands
+    if @commands
+      @commands
+    else
+      @commands = Commands.new(@nc_api_url, @puppet_https)
     end
   end
 end
