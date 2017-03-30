@@ -25,7 +25,7 @@ Tickets: Open an issue or pull request directly on this repository
 
 ## How to use
 
-Here is the basic configuration you'll need to use the puppetclassify class:
+Here is the basic configuration you'll need to use the puppetclassify class with certificate auth:
 
 ```ruby
 require 'puppetclassify'
@@ -39,6 +39,25 @@ auth_info = {
 
 classifier_url = 'https://puppetmaster.local:4433/classifier-api'
 puppetclassify = PuppetClassify.new(classifier_url, auth_info)
+```
+
+You can also use token auth by either supplying a path to a token file:
+
+```ruby
+auth_info = {
+  "ca_certificate_path" => "/etc/puppetlabs/puppet/ssl/certs/ca.pem",
+  "token_path"          => "/home/sam/.puppetlabs/token",
+}
+```
+
+Or by specifying a token string directly:
+
+```ruby
+token = 'eyJhbGciOiJSUzUxM....'
+auth_info = {
+  "ca_certificate_path" => "/etc/puppetlabs/puppet/ssl/certs/ca.pem",
+  "token"               => token,
+}
 ```
 
 ### Basic case
