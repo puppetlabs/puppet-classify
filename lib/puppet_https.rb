@@ -8,35 +8,63 @@ class PuppetHttps
     #   - certificate_path (optional)
     #   - private_key_path (optional)
     #   - read_timeout (optional)
-    #   - token_path (optional)
+    #   - token_path (default: $HOME/.puppetlabs/token)
     #   - token (optional, takes precedence over token_path)
+    #
+    #   token auth takes precedence over cert auth (in the case that both methods are provided)
 
-    @settings = settings
-    @token    = @settings['token']
+    default_token_path = File.join(ENV['HOME'], '.puppetlabs', 'token')
+
+    cert_path = settings['certificate_path']
+    pkey_path = settings['private_key_path']
+
+    @ca_file      = settings['ca_certificate_path'] if File.exists?(settings['ca_certificate_path'])
+    @read_timeout = settings['read_timeout'] || 90 # A default timeout value in seconds
+
+    @auth_method = case
+      when (settings['token'] or settings['token_path'])
+        'token'
+      when (cert_path and pkey_path)
+        'cert'
+      when File.exists?(default_token_path)
+        'token'
+      else
+        nil
+      end
+
+    unless @auth_method
+      raise RuntimeError "No authentication methods available."
+    end
+
+    case @auth_method
+    when 'token'
+      @token      = settings['token']
+      @token_path = (settings['token_path'] || default_token_path) unless @token
+    when 'cert'
+      if File.exists?(cert_path) and File.exists?(pkey_path)
+        @cert = OpenSSL::X509::Certificate.new(File.read(cert_path))
+        @key  = OpenSSL::PKey::RSA.new(File.read(pkey_path))
+      else
+        raise RuntimeError "Certificate auth requested but certificate or private key cannot be found."
+      end
+    end
+
   end
 
   def make_ssl_request(url, req)
     connection = Net::HTTP.new(url.host, url.port)
+
     # connection.set_debug_output $stderr
-    connection.use_ssl = true
-    connection.ssl_version = :TLSv1
-    connection.read_timeout = @settings['read_timeout'] || 90 #A default timeout value in seconds
 
-    connection.verify_mode = OpenSSL::SSL::VERIFY_PEER
-    ca_file   = @settings['ca_certificate_path']
-    certpath  = @settings['certificate_path']
-    pkey_path = @settings['private_key_path']
+    connection.use_ssl      = true
+    connection.ssl_version  = :TLSv1
+    connection.verify_mode  = OpenSSL::SSL::VERIFY_PEER
+    connection.ca_file      = @ca_file if @ca_file
+    connection.read_timeout = @read_timeout
 
-    if ca_file and File.exists?(ca_file)
-      connection.ca_file = ca_file
-    end
-
-    if certpath and File.exists?(certpath)
-      connection.cert = OpenSSL::X509::Certificate.new(File.read(certpath))
-    end
-
-    if pkey_path and File.exists?(pkey_path)
-      connection.key = OpenSSL::PKey::RSA.new(File.read(pkey_path))
+    if @auth_method == 'cert'
+      connection.cert = @cert
+      connection.key  = @key
     end
 
     connection.start { |http| http.request(req) }
@@ -90,9 +118,8 @@ class PuppetHttps
 
   def token
     return @token if @token
-    token_path = @settings['token_path']
-    if token_path and File.exists?(token_path)
-      @token = File.read(token_path)
+    if @token_path and File.exists?(@token_path)
+      @token = File.read(@token_path)
       return @token
     end
     return nil
