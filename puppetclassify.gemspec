@@ -4,8 +4,8 @@ Gem::Specification.new do |s|
   s.date        = '2014-10-30'
   s.summary     = 'Puppet Classify!'
   s.description = 'A ruby library to interface with the classifier service'
-  s.authors     = ['Brian Cain']
-  s.email       = 'brian.cain@puppetlabs.com'
+  s.authors     = ['Puppet Labs']
+  s.email       = 'info@puppet.com'
   s.files       = Dir['README.md', 'lib/**/*']
   s.license     = 'MIT'
   s.homepage    = 'https://github.com/puppetlabs/puppet-classify'
