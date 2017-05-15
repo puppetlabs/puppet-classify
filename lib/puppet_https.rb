@@ -43,6 +43,15 @@ class PuppetHttps
     when 'token'
       @token      = settings['token']
       @token_path = (settings['token_path'] || default_token_path) unless @token
+      # Make sure we have a token and it's not empty
+      case
+      when (@token and @token.empty?)
+        raise RuntimeError, "Received an empty string for token"
+      when (not @token and not File.exists?(@token_path))
+        raise RuntimeError, "Token file not found at [#{@token_path}]"
+      when (not @token and File.zero?(@token_path))
+        raise RuntimeError, "Token file at [#{@token_path}] is empty"
+      end
     when 'cert'
       if File.exists?(cert_path) and File.exists?(pkey_path)
         @cert = OpenSSL::X509::Certificate.new(File.read(cert_path))
@@ -51,6 +60,7 @@ class PuppetHttps
         raise RuntimeError, "Certificate auth requested but certificate or private key cannot be found."
       end
     end
+
 
   end
 

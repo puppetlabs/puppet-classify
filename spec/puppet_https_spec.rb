@@ -59,10 +59,24 @@ describe PuppetHttps do
           )
         end
       end
+
     end
 
-    describe "with token path" do
-      before :each do
+    describe "with passed empty token" do
+      it "detects the empty token" do
+        @classifier_url = 'https://puppetmaster.local:4433/classifier-api'
+
+        auth_info = {
+          "ca_certificate_path" => "/opt/puppet/share/puppet-dashboard/certs/ca_cert.pem",
+          "token"               => "",
+        }
+
+        expect { @puppet_https = PuppetHttps.new(auth_info) }.to raise_error(RuntimeError, /Received an empty string for token/)
+      end
+    end
+
+    describe "with valid token path" do
+      it "takes an auth hash and returns a PuppetHttps object" do
         @classifier_url = 'https://puppetmaster.local:4433/classifier-api'
 
         auth_info = {
@@ -70,27 +84,39 @@ describe PuppetHttps do
           "token_path"          => "/home/foo/.puppetlabs/token",
         }
 
-        @puppet_https = PuppetHttps.new(auth_info)
-      end
+        expect(File).to receive(:exists?).with("/home/foo/.puppetlabs/token").and_return(true)
+        expect(File).to receive(:zero?).with("/home/foo/.puppetlabs/token").and_return(false)
+        expect(File).to receive(:exists?).with(auth_info['ca_certificate_path']).and_return(true)
 
-      describe "#new" do
-        it "takes an auth hash and returns a PuppetHttps object" do
-          expect(@puppet_https).to be_an_instance_of PuppetHttps
-          expect(@puppet_https).to have_attributes(
-            :auth_method => 'token',
-            :token_path  => "/home/foo/.puppetlabs/token",
-          )
-        end
+        @puppet_https = PuppetHttps.new(auth_info)
+        expect(@puppet_https).to be_an_instance_of PuppetHttps
+        expect(@puppet_https).to have_attributes(
+          :auth_method => 'token',
+          :token_path  => "/home/foo/.puppetlabs/token",
+        )
+      end
+    end
+
+    describe "with token path specified for a non existant file" do
+      it "detects the missing token file" do
+        @classifier_url = 'https://puppetmaster.local:4433/classifier-api'
+
+        auth_info = {
+          "token_path"          => "/no/such/path",
+        }
+        expect(File).to receive(:exists?).with("/no/such/path").and_return(false)
+        expect { @puppet_https = PuppetHttps.new(auth_info) }.to raise_error(RuntimeError, 'Token file not found at [/no/such/path]')
       end
     end
   end
 
   describe "with no auth method specified" do
-    default_token_path = File.join(ENV['HOME'], '.puppetlabs', 'token')
+    default_token_path = File.join('/homie/foo', '.puppetlabs', 'token')
 
     describe "and a token file at the default location" do
       it "uses the token file from the default location" do
-        expect(File).to receive("exists?").with(default_token_path).and_return(true)
+        allow(ENV).to receive(:[]).with("HOME").and_return("/homie/foo")
+        expect(File).to receive("exists?").with(default_token_path).twice.and_return(true)
         @puppet_https = PuppetHttps.new({})
         expect(@puppet_https).to be_an_instance_of PuppetHttps
         expect(@puppet_https).to have_attributes(
@@ -100,8 +126,20 @@ describe PuppetHttps do
       end
     end
 
+    describe "and an empty token file at the default location" do
+
+      it "raises an exception" do
+        allow(ENV).to receive(:[]).with("HOME").and_return("/homie/foo")
+        expect(File).to receive("exists?").twice.with(default_token_path).and_return(true)
+        expect(File).to receive("zero?").with(default_token_path).and_return(true)
+
+        expect { @puppet_https = PuppetHttps.new({}) }.to raise_error(RuntimeError, "Token file at [#{default_token_path}] is empty")
+      end
+    end
+
     describe "and no token file at the default location" do
       it "raises an exception" do
+        allow(ENV).to receive(:[]).with("HOME").and_return("/homie/foo")
         expect(File).to receive("exists?").with(default_token_path).and_return(false)
         expect { @puppet_https = PuppetHttps.new({}) }.to raise_error(RuntimeError, /No authentication methods available/)
       end
