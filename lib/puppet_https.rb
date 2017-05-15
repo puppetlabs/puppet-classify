@@ -2,6 +2,8 @@ require 'uri'
 require 'net/https'
 
 class PuppetHttps
+  attr_reader :auth_method, :token_path
+
   def initialize(settings)
     # Settings hash:
     #   - ca_certificate_path
@@ -15,10 +17,11 @@ class PuppetHttps
 
     default_token_path = File.join(ENV['HOME'], '.puppetlabs', 'token')
 
-    cert_path = settings['certificate_path']
-    pkey_path = settings['private_key_path']
+    ca_cert_path = settings['ca_certificate_path']
+    cert_path    = settings['certificate_path']
+    pkey_path    = settings['private_key_path']
 
-    @ca_file      = settings['ca_certificate_path'] if File.exists?(settings['ca_certificate_path'])
+    @ca_file      = settings['ca_certificate_path'] if ca_cert_path and File.exists?(ca_cert_path)
     @read_timeout = settings['read_timeout'] || 90 # A default timeout value in seconds
 
     @auth_method = case
@@ -33,7 +36,7 @@ class PuppetHttps
       end
 
     unless @auth_method
-      raise RuntimeError "No authentication methods available."
+      raise RuntimeError, "No authentication methods available."
     end
 
     case @auth_method
@@ -45,7 +48,7 @@ class PuppetHttps
         @cert = OpenSSL::X509::Certificate.new(File.read(cert_path))
         @key  = OpenSSL::PKey::RSA.new(File.read(pkey_path))
       else
-        raise RuntimeError "Certificate auth requested but certificate or private key cannot be found."
+        raise RuntimeError, "Certificate auth requested but certificate or private key cannot be found."
       end
     end
 
