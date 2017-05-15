@@ -60,6 +60,14 @@ auth_info = {
 }
 ```
 
+If you have a token file at `~/.puppetlabs/token` then you can make use of it by not specifying any authentication info, ie:
+
+```ruby
+auth_info = {
+  "ca_certificate_path" => "/etc/puppetlabs/puppet/ssl/certs/ca.pem",
+}
+```
+
 ### Basic case
 
 If you are wanting to get all of the groups the classifier knows about:
