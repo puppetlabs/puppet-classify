@@ -15,7 +15,7 @@ class PuppetHttps
     #
     #   token auth takes precedence over cert auth (in the case that both methods are provided)
 
-    default_token_path = File.join(ENV['HOME'], '.puppetlabs', 'token')
+    default_token_path = ENV['HOME'].nil? ? nil : File.join(ENV['HOME'], '.puppetlabs', 'token')
 
     ca_cert_path = settings['ca_certificate_path']
     cert_path    = settings['certificate_path']
@@ -29,7 +29,7 @@ class PuppetHttps
         'token'
       when (cert_path and pkey_path)
         'cert'
-      when File.exists?(default_token_path)
+      when default_token_path && File.exists?(default_token_path)
         'token'
       else
         nil
