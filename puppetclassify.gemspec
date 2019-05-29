@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'puppetclassify'
-  s.version     = '0.1.7'
-  s.date        = '2017-05-16'
+  s.version     = '0.1.8'
+  s.date        = '2019-05-29'
   s.summary     = 'Puppet Classify!'
   s.description = 'A ruby library to interface with the classifier service'
   s.authors     = ['Puppet Labs']
