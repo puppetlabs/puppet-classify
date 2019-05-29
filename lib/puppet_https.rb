@@ -70,7 +70,7 @@ class PuppetHttps
     # connection.set_debug_output $stderr
 
     connection.use_ssl      = true
-    connection.ssl_version  = :TLSv1
+    connection.ssl_version  = :TLSv1_2
     connection.verify_mode  = OpenSSL::SSL::VERIFY_PEER
     connection.ca_file      = @ca_file if @ca_file
     connection.read_timeout = @read_timeout
