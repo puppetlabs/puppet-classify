@@ -147,7 +147,7 @@ puppetclassify.groups.pin_nodes(my_group_id, nodes)
 puppetclassify.groups.unpin_nodes(my_group_id, nodes)
 
 # unpin nodes from EVERY group
-puppetlcassify.commands.unpin_from_all(nodes)
+puppetclassify.commands.unpin_from_all(nodes)
 ```
 
 ## Library Docs
