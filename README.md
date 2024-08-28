@@ -19,7 +19,7 @@ gem install puppetclassify-0.1.0.gem
 
 ## Maintenance
 
-Maintainers: [Brian Cain](https://github.com/briancain) <brian.cain@puppetlabs.com>
+Maintainers: [Puppet](https://github.com/puppetlabs)
 
 Tickets: Open an issue or pull request directly on this repository
 
