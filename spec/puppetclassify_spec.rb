@@ -15,9 +15,9 @@ describe PuppetClassify do
       "ca_certificate_path" => ca_certificate_path,
     }
 
-    expect(File).to receive("exists?").with(certificate_path).and_return(true)
-    expect(File).to receive("exists?").with(private_key_path).and_return(true)
-    expect(File).to receive("exists?").with(ca_certificate_path).and_return(true)
+    expect(File).to receive("exist?").with(certificate_path).and_return(true)
+    expect(File).to receive("exist?").with(private_key_path).and_return(true)
+    expect(File).to receive("exist?").with(ca_certificate_path).and_return(true)
 
     expect(File).to receive("read").with(certificate_path).and_return('a cert')
     expect(File).to receive("read").with(private_key_path).and_return('a key')

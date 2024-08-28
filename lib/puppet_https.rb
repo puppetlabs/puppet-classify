@@ -21,7 +21,7 @@ class PuppetHttps
     cert_path    = settings['certificate_path']
     pkey_path    = settings['private_key_path']
 
-    @ca_file      = settings['ca_certificate_path'] if ca_cert_path and File.exists?(ca_cert_path)
+    @ca_file      = settings['ca_certificate_path'] if ca_cert_path and File.exist?(ca_cert_path)
     @read_timeout = settings['read_timeout'] || 90 # A default timeout value in seconds
 
     @auth_method = case
@@ -29,7 +29,7 @@ class PuppetHttps
         'token'
       when (cert_path and pkey_path)
         'cert'
-      when default_token_path && File.exists?(default_token_path)
+      when default_token_path && File.exist?(default_token_path)
         'token'
       else
         nil
@@ -47,13 +47,13 @@ class PuppetHttps
       case
       when (@token and @token.empty?)
         raise RuntimeError, "Received an empty string for token"
-      when (not @token and not File.exists?(@token_path))
+      when (not @token and not File.exist?(@token_path))
         raise RuntimeError, "Token file not found at [#{@token_path}]"
       when (not @token and File.zero?(@token_path))
         raise RuntimeError, "Token file at [#{@token_path}] is empty"
       end
     when 'cert'
-      if File.exists?(cert_path) and File.exists?(pkey_path)
+      if File.exist?(cert_path) and File.exist?(pkey_path)
         @cert = OpenSSL::X509::Certificate.new(File.read(cert_path))
         @key  = OpenSSL::PKey::RSA.new(File.read(pkey_path))
       else
@@ -131,7 +131,7 @@ class PuppetHttps
 
   def token
     return @token if @token
-    if @token_path and File.exists?(@token_path)
+    if @token_path and File.exist?(@token_path)
       @token = File.read(@token_path)
       return @token
     end
